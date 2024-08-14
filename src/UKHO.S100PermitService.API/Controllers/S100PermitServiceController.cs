@@ -14,11 +14,9 @@ namespace UKHO.S100PermitService.API.Controllers
         }
 
         [HttpGet("S100GeneratePermit")]
-        public IActionResult GeneratePermit(string upn, string mkey)
+        public IActionResult GeneratePermit(string mid, string mkey, string hwid)
         {
-            string mid = upn[40..];
-            string hwId = s100Service.GetDecryptedHwdId(upn, mid, mkey);
-            string permit = s100Service.GetUserPermitNumber(mid, mkey, hwId);
+            string permit = s100Service.GetUserPermitNumber(mid, mkey, hwid);
 
             return Json(permit);
         }
@@ -32,17 +30,16 @@ namespace UKHO.S100PermitService.API.Controllers
         }
 
         [HttpGet("S100GetEncryptedDataKey")]
-        public IActionResult GetEncryptedDataKey(string upn, string mkey)
+        public IActionResult GetEncryptedDataKey(string hwid)
         {
             /*** dummy data **/
-            string dataKey = "123";
-            string fileName = "test";
+            string dataKey = "123ABC";
+            string fileName = "12345678";
             int edtn = 1;
             /*** dummy data **/
 
-            string hwId = s100Service.GetDecryptedHwdId(upn, upn[40..], mkey);
             
-            string encryptedDataKey = s100Service.GetEncryptedDataKey(hwId, dataKey, fileName, edtn);
+            string encryptedDataKey = s100Service.GetEncryptedDataKey(hwid, dataKey, fileName, edtn);
 
             return Json(encryptedDataKey);
         }
