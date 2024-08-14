@@ -2,15 +2,15 @@
 using UKHO.S100PermitService.Common.Helpers;
 using UKHO.S100PermitService.Common.Security;
 
-namespace UKHO.S100PermitService.Common
+namespace UKHO.S100PermitService.Common.Services
 {
     //test commit-ST
     public class S100Service : IS100Service
     {
 
-        public S100Service() 
-        { 
-        
+        public S100Service()
+        {
+
         }
 
         public string GetDecryptedHwdId(string upn, string mid, string key)
@@ -20,16 +20,16 @@ namespace UKHO.S100PermitService.Common
             return s100Manufacturer.Decrypt(upn[..32]);
         }
 
-        public string GetEncryptedDataKey(string hwId, string dataKey, string fileName,int edtn)
+        public string GetEncryptedDataKey(string hwId, string dataKey, string fileName, int edtn)
         {
-            S100DataPermit dp = new S100DataPermit(fileName, edtn, new DateTime(),new S100ProductSpecification(101));
+            S100DataPermit dp = new(fileName, edtn, new DateTime(), new S100ProductSpecification(101));
 
             return dp.GetEncryptedDataKey();
         }
 
         public string GetUserPermitNumber(string mId, string mKey, string hwId)
         {
-            S100Manufacturer manufacturer = new S100Manufacturer(mId, mKey);
+            S100Manufacturer manufacturer = new(mId, mKey);
 
             string hwIdEncrypted = manufacturer.Encrypt(hwId);
 

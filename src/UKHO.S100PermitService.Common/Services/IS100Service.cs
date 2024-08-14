@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UKHO.S100PermitService.Common
+namespace UKHO.S100PermitService.Common.Services
 {
     public interface IS100Service
     {

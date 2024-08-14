@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UKHO.S100PermitService.Common;
+using UKHO.S100PermitService.Common.Services;
 
 namespace UKHO.S100PermitService.API.Controllers
 {
