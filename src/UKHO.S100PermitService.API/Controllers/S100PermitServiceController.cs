@@ -18,7 +18,7 @@ namespace UKHO.S100PermitService.API.Controllers
         {
             string permit = s100Service.GetUserPermitNumber(mid, mkey, hwid);
 
-            return Json(permit);
+            return new JsonResult(permit);
         }
 
         [HttpGet("S100GetDecryptedHwdId")]
@@ -26,7 +26,7 @@ namespace UKHO.S100PermitService.API.Controllers
         {
             string hwId = s100Service.GetDecryptedHwdId(upn, upn[40..], mkey);
 
-            return Json(hwId);
+            return new JsonResult(hwId);
         }
 
         [HttpGet("S100GetEncryptedDataKey")]
@@ -41,7 +41,7 @@ namespace UKHO.S100PermitService.API.Controllers
             
             string encryptedDataKey = s100Service.GetEncryptedDataKey(hwid, dataKey, fileName, edtn);
 
-            return Json(encryptedDataKey);
+            return new JsonResult(encryptedDataKey);
         }
     }
 }
