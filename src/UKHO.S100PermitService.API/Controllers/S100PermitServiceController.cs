@@ -4,7 +4,7 @@ using UKHO.S100PermitService.Common;
 namespace UKHO.S100PermitService.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class S100PermitServiceController : Controller
     {
         private readonly S100Service s100Service;
@@ -13,7 +13,7 @@ namespace UKHO.S100PermitService.API.Controllers
             this.s100Service = new S100Service();
         }
 
-        [HttpGet("S100GeneratePermit")]
+        [HttpGet]
         public IActionResult GeneratePermit(string mid, string mkey, string hwid)
         {
             string permit = s100Service.GetUserPermitNumber(mid, mkey, hwid);
@@ -21,7 +21,7 @@ namespace UKHO.S100PermitService.API.Controllers
             return new JsonResult(permit);
         }
 
-        [HttpGet("S100GetDecryptedHwdId")]
+        [HttpGet]
         public IActionResult GetDecryptedHwdId(string upn, string mkey)
         {
             string hwId = s100Service.GetDecryptedHwdId(upn, upn[40..], mkey);
@@ -29,7 +29,7 @@ namespace UKHO.S100PermitService.API.Controllers
             return new JsonResult(hwId);
         }
 
-        [HttpGet("S100GetEncryptedDataKey")]
+        [HttpGet]
         public IActionResult GetEncryptedDataKey(string hwid)
         {
             /*** dummy data **/
