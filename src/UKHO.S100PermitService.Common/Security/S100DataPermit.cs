@@ -37,7 +37,7 @@ namespace UKHO.S100PermitService.Common.Security
         public S100DataPermit Create(string dataKey, string hwId)
         {
             S100Crypt crypt = new(hwId);
-            string encryptedDataKey = Hex.ToString(crypt.Encrypt(Hex.FromString(dataKey)));
+            var encryptedDataKey = Hex.ToString(crypt.Encrypt(dataKey));
             return new S100DataPermit(fileName, edtn, permitEndDate, productSpecification, encryptedDataKey);
         }
 
