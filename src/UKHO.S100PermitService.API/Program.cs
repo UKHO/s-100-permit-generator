@@ -1,4 +1,7 @@
 
+using Microsoft.OpenApi.Models;
+using System.Reflection;
+
 namespace UKHO.S100PermitService.API
 {
     public class Program
@@ -26,7 +29,6 @@ namespace UKHO.S100PermitService.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
