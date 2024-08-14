@@ -38,7 +38,7 @@ namespace UKHO.S100PermitService.API.Controllers
             int edtn = 1;
             /*** dummy data **/
 
-            
+
             string encryptedDataKey = s100Service.GetEncryptedDataKey(hwid, dataKey, fileName, edtn);
 
             return new JsonResult(encryptedDataKey);
