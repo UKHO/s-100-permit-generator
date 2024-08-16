@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace UKHO.S100PermitService.Common.Helpers
 {
-    public class Hex
+    public static class Hex
     {
         public static string ToString(byte[] data)
         {
-            StringBuilder hex = new StringBuilder(data.Length * 2);
+            StringBuilder hex = new(data.Length * 2);
             foreach (byte b in data)
             {
                 hex.AppendFormat("{0:X2}", b);
