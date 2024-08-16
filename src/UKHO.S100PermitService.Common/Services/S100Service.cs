@@ -1,13 +1,10 @@
-﻿using System.Text;
-using UKHO.S100PermitService.Common.Helpers;
+﻿using ICSharpCode.SharpZipLib.Checksum;
+using System.Text;
 using UKHO.S100PermitService.Common.Security;
-
 namespace UKHO.S100PermitService.Common.Services
 {
-    //test commit-ST
     public class S100Service : IS100Service
     {
-
         public S100Service()
         {
 
@@ -33,7 +30,9 @@ namespace UKHO.S100PermitService.Common.Services
 
             string hwIdEncrypted = manufacturer.Encrypt(hwId);
 
-            string calculatedCrc = CRC32Helper.Crc32String(Encoding.UTF8.GetBytes(hwIdEncrypted));
+            var crc = new Crc32();
+            crc.Update(Encoding.UTF8.GetBytes(hwIdEncrypted));
+            var calculatedCrc = crc.Value.ToString("X8");
 
             var upn = hwIdEncrypted + calculatedCrc + mId;
             return upn;
