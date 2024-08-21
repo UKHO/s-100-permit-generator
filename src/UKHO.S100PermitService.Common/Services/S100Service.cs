@@ -39,6 +39,5 @@ namespace UKHO.S100PermitService.Common.Services
             var upn = hwIdEncrypted + calculatedCrc + mId;
             return upn;
         }
-
     }
 }

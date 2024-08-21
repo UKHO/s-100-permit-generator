@@ -1,5 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using UKHO.S100PermitService.Common.Models;
 using UKHO.S100PermitService.Common.Services;
+using UKHO.S100PermitService.Common.Validators;
 
 namespace UKHO.S100PermitService.API.Controllers
 {
@@ -8,6 +12,7 @@ namespace UKHO.S100PermitService.API.Controllers
     public class S100PermitServiceController : Controller
     {
         private readonly S100Service s100Service;
+
         public S100PermitServiceController()
         {
             this.s100Service = new S100Service();
@@ -16,17 +21,32 @@ namespace UKHO.S100PermitService.API.Controllers
         [HttpGet]
         public IActionResult GeneratePermit(string mid, string mkey, string hwid)
         {
-            string permit = s100Service.GetUserPermitNumber(mid, mkey, hwid);
+            S100UserPermit s100UserPermit = new() { MId = mid, MKey = mkey, HwId = hwid };
+            UserPermitValidator validator = new();
 
-            return new JsonResult(permit);
+            var result = validator.Validate(s100UserPermit);
+            if (result.IsValid)
+            {
+                string permit = s100Service.GetUserPermitNumber(mid, mkey, hwid);
+                return new JsonResult(permit);
+            }
+            return BadRequest(result.Errors);
         }
 
         [HttpGet]
         public IActionResult GetDecryptedHwdId(string upn, string mkey)
         {
-            string hwId = s100Service.GetDecryptedHwdId(upn, upn[40..], mkey);
+            S100UserPermit s100UserPermit = new() { MKey = mkey, UserPermit = upn };
+            DecryptUserPermitValidator validator = new();
 
-            return new JsonResult(hwId);
+            var result = validator.Validate(s100UserPermit);
+            if (result.IsValid)
+            {
+                string hwId = s100Service.GetDecryptedHwdId(upn, upn[40..], mkey);
+
+                return new JsonResult(hwId);
+            }
+            return BadRequest(result.Errors);
         }
 
         [HttpGet]
