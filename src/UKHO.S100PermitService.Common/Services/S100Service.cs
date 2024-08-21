@@ -21,6 +21,8 @@ namespace UKHO.S100PermitService.Common.Services
         {
             S100DataPermit dp = new(fileName, edtn, new DateTime(), new S100ProductSpecification(101));
 
+            dp.Create(dataKey, hwId);
+
             return dp.GetEncryptedDataKey();
         }
 

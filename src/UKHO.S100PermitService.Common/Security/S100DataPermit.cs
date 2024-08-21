@@ -13,8 +13,8 @@ namespace UKHO.S100PermitService.Common.Security
         private readonly string fileName;
         private readonly int edtn;
         private readonly DateTime permitEndDate;
-        private readonly string encryptedDataKey;
         private readonly S100ProductSpecification productSpecification;
+        private string encryptedDataKey;
 
         public const string PERMIT_ELEMENT = "permit";
         public const string FILENAME_ELEMENT = "filename";
@@ -37,7 +37,7 @@ namespace UKHO.S100PermitService.Common.Security
         public S100DataPermit Create(string dataKey, string hwId)
         {
             S100Crypt crypt = new(hwId);
-            var encryptedDataKey = Hex.ToString(crypt.Encrypt(dataKey));
+            this.encryptedDataKey = Hex.ToString(crypt.Encrypt(dataKey));
             return new S100DataPermit(fileName, edtn, permitEndDate, productSpecification, encryptedDataKey);
         }
 
