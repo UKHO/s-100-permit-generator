@@ -1,5 +1,4 @@
-﻿using ICSharpCode.SharpZipLib.Checksum;
-using System.Text;
+﻿using UKHO.S100PermitService.Common.Helpers;
 using UKHO.S100PermitService.Common.Security;
 namespace UKHO.S100PermitService.Common.Services
 {
@@ -31,13 +30,12 @@ namespace UKHO.S100PermitService.Common.Services
             S100Manufacturer manufacturer = new(mId, mKey);
 
             string hwIdEncrypted = manufacturer.Encrypt(hwId);
-
-            var crc = new Crc32();
-            crc.Update(Encoding.UTF8.GetBytes(hwIdEncrypted));
-            var calculatedCrc = crc.Value.ToString("X8");
+            string calculatedCrc = Crc32Helper.Crc32String(hwIdEncrypted);
 
             var upn = hwIdEncrypted + calculatedCrc + mId;
             return upn;
         }
+
+
     }
 }
