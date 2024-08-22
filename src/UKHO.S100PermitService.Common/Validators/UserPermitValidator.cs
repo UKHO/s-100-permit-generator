@@ -19,7 +19,7 @@ namespace UKHO.S100PermitService.Common.Validators
         public DecryptUserPermitValidator()
         {
             RuleFor(userPermit => userPermit.MKey).NotNull().Length(32);
-            RuleFor(userPermit => userPermit.UserPermit).Length(46);
+            RuleFor(userPermit => userPermit.UserPermit).NotNull().Length(46);
         }
         
     }
