@@ -53,7 +53,7 @@ namespace UKHO.S100PermitService.API.Controllers
         public IActionResult GetEncryptedDataKey(string hwid)
         {
             /*** dummy data **/
-            string dataKey = "123ABC";
+            string dataKey = "1C81DFAB4053D04803FFDC87EF92FDD1";
             string fileName = "12345678";
             int edtn = 1;
             /*** dummy data **/
