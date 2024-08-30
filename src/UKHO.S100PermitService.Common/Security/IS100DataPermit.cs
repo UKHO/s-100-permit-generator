@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace UKHO.S100PermitService.Common.Security
+﻿namespace UKHO.S100PermitService.Common.Security
 {
     public interface IS100DataPermit
     {
-        S100DataPermit Create(string dataKey, string hwId);
-
+        public S100DataPermit CreateEncrypt(string dataKey, string hwId);
+        public S100DataPermit CreateDecrypt(string dataKey, string hwId);
+        public string GetDecryptedDataKey();
         string GetEncryptedDataKey();
     }
 }

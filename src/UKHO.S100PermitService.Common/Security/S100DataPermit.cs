@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +15,7 @@ namespace UKHO.S100PermitService.Common.Security
         private readonly int edtn;
         private readonly DateTime permitEndDate;
         private readonly S100ProductSpecification productSpecification;
-        private string encryptedDataKey;
+        private string dataKey;
 
         public const string PERMIT_ELEMENT = "permit";
         public const string FILENAME_ELEMENT = "filename";
@@ -25,26 +26,37 @@ namespace UKHO.S100PermitService.Common.Security
         public const string EXPIRY_DATE_FORMAT = "yyyyMMdd";
 
         public S100DataPermit(string fileName, int edtn, DateTime permitEndDate, 
-            S100ProductSpecification productSpecification, string encryptedDataKey = "")
+            S100ProductSpecification productSpecification, string dataKey = "")
         {
             this.fileName = fileName;
             this.edtn = edtn;
             this.permitEndDate = permitEndDate;
-            this.encryptedDataKey = encryptedDataKey;
+            this.dataKey = dataKey;
             this.productSpecification = productSpecification;
         }
 
-        public S100DataPermit Create(string dataKey, string hwId)
+        public S100DataPermit CreateEncrypt(string dataKey, string hwId)
         {
             S100Crypt crypt = new(hwId);
-            this.encryptedDataKey = Hex.ToString(crypt.Encrypt(dataKey));
-            return new S100DataPermit(fileName, edtn, permitEndDate, productSpecification, encryptedDataKey);
+            this.dataKey = Hex.ToString(crypt.Encrypt(dataKey));
+            return new S100DataPermit(fileName, edtn, permitEndDate, productSpecification, dataKey);
         }
 
         public string GetEncryptedDataKey()
         {
-            return encryptedDataKey;
+            return dataKey;
         }
 
+        public S100DataPermit CreateDecrypt(string dataKey, string hwId)
+        {
+            S100Crypt crypt = new(hwId);
+            this.dataKey = Hex.ToString(crypt.Decrypt(dataKey));
+            return new S100DataPermit(fileName, edtn, permitEndDate, productSpecification, dataKey);
+        }
+
+        public string GetDecryptedDataKey()
+        {
+            return dataKey;
+        }
     }
 }

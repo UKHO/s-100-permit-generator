@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography;
 using UKHO.S100PermitService.Common.Models;
 using UKHO.S100PermitService.Common.Services;
@@ -50,10 +49,10 @@ namespace UKHO.S100PermitService.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetEncryptedDataKey(string hwid)
+        public IActionResult GetEncryptedDataKey(string hwid, string dataKey)
         {
             /*** dummy data **/
-            string dataKey = "1C81DFAB4053D04803FFDC87EF92FDD1";
+            ////string dataKey = "1C81DFAB4053D04803FFDC87EF92FDD1";
             string fileName = "12345678";
             int edtn = 1;
             /*** dummy data **/
@@ -62,6 +61,29 @@ namespace UKHO.S100PermitService.API.Controllers
             string encryptedDataKey = s100Service.GetEncryptedDataKey(hwid, dataKey, fileName, edtn);
 
             return new JsonResult(encryptedDataKey);
+        }
+
+        [HttpGet]
+        public IActionResult GetDecryptedDataKey(string hwid, string encryptedDataKey)
+        {
+            /*** dummy data **/
+            ////string dataKey = "1C81DFAB4053D04803FFDC87EF92FDD1";
+            string fileName = "12345678";
+            int edtn = 1;
+            /*** dummy data **/
+
+
+            string decryptedDataKey = s100Service.GetDecryptedDataKey(hwid, encryptedDataKey, fileName, edtn);
+
+            return new JsonResult(decryptedDataKey);
+        }
+
+        [HttpGet]
+        public IActionResult GeneRateRandomHwId()
+        {
+            byte[] d = new byte[16];
+            RandomNumberGenerator.Fill(d);
+            return new JsonResult(BitConverter.ToString(d).Replace("-", ""));
         }
     }
 }
