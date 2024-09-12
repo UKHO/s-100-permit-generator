@@ -97,6 +97,10 @@ resource "azurerm_key_vault_access_policy" "kv2_access_terraform" {
     "Recover",
     "Purge"
   ]
+
+    lifecycle {
+       prevent_destroy = true
+   }
 }
 
 #access policy for read access (app service)
@@ -115,4 +119,8 @@ resource "azurerm_key_vault_access_policy" "kv2_read_access" {
     "List",
     "Get"
   ]
+
+    lifecycle {
+       prevent_destroy = true
+   }
 }
