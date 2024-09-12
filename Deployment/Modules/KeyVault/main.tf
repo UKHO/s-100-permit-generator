@@ -74,10 +74,6 @@ resource "azurerm_key_vault" "kv2" {
 
 }
 
-lifecycle {
-        prevent_destroy       = true
-  }
-
 
 #access policy for terraform script service account
 resource "azurerm_key_vault_access_policy" "kv2_access_terraform" {
