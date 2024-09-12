@@ -132,4 +132,7 @@ resource "azurerm_key_vault_secret" "passed_in_secrets2" {
   tags         = var.tags
 
   depends_on = [azurerm_key_vault_access_policy.kv2_access_terraform]
+  lifecycle {
+       prevent_destroy = true
+   }
 }
