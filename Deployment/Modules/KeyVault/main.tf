@@ -72,6 +72,10 @@ resource "azurerm_key_vault" "kv2" {
   sku_name = "standard"
   tags = var.tags
 
+  lifecycle {
+       prevent_destroy = true
+   }
+
 }
 
 
