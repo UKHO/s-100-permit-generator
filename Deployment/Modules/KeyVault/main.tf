@@ -124,7 +124,7 @@ resource "azurerm_key_vault_access_policy" "kv2_read_access" {
        prevent_destroy = true
    }
 }
-resource "azurerm_key_vault_secret" "passed_in_secrets" {
+resource "azurerm_key_vault_secret" "passed_in_secrets2" {
   count        = length(var.secrets)
   name         = keys(var.secrets)[count.index]
   value        = values(var.secrets)[count.index]
