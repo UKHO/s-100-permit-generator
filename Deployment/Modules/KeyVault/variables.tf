@@ -26,10 +26,13 @@ variable "secrets" {
   type = map(string)
 }
 
+variable "secrets_kv2" {
+  type = map(string)
+}
 variable "tags" {
 
 }
-variable "testkv2" {
+variable "name_kv2" {
 
 }
 

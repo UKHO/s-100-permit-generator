@@ -6,9 +6,8 @@ resource "azurerm_key_vault" "kv" {
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = var.tenant_id
-
-  sku_name = "standard"
-  tags = var.tags
+  sku_name                    = "standard"
+  tags                        = var.tags
 
 }
 
@@ -63,21 +62,19 @@ resource "azurerm_key_vault_secret" "passed_in_secrets" {
 ############################## Keyvalut 2 ######################
 
 resource "azurerm_key_vault" "kv2" {
-  name                        = var.testkv2
+  name                        = var.name_kv2
   location                    = var.location
   resource_group_name         = var.resource_group_name
   enabled_for_disk_encryption = true
   tenant_id                   = var.tenant_id
-
-  sku_name = "standard"
-  tags = var.tags
+  sku_name                    = "standard"
+  tags                        = var.tags
 
   lifecycle {
        prevent_destroy = true
    }
 
 }
-
 
 #access policy for terraform script service account
 resource "azurerm_key_vault_access_policy" "kv2_access_terraform" {
@@ -98,7 +95,7 @@ resource "azurerm_key_vault_access_policy" "kv2_access_terraform" {
     "Purge"
   ]
 
-    lifecycle {
+  lifecycle {
        prevent_destroy = true
    }
 }
@@ -120,7 +117,21 @@ resource "azurerm_key_vault_access_policy" "kv2_read_access" {
     "Get"
   ]
 
-    lifecycle {
+  lifecycle {
+       prevent_destroy = true
+   }
+}
+
+resource "azurerm_key_vault_secret" "passed_in_secrets_kv2" {
+  count        = length(var.secrets_kv2)
+  name         = keys(var.secrets_kv2)[count.index]
+  value        = values(var.secrets_kv2)[count.index]
+  key_vault_id = azurerm_key_vault.kv.id
+  tags         = var.tags
+
+  depends_on = [azurerm_key_vault_access_policy.kv2_access_terraform]
+
+  lifecycle {
        prevent_destroy = true
    }
 }
