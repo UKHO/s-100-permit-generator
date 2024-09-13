@@ -133,17 +133,6 @@ resource "azurerm_key_vault_secret" "passed_in_secrets_kv2" {
 
   lifecycle {
        prevent_destroy = true
-   }
-}
-resource "azurerm_key_vault_secret" "passed_in_secrets2" {
-  count        = length(var.secrets)
-  name         = keys(var.secrets)[count.index]
-  value        = values(var.secrets)[count.index]
-  key_vault_id = azurerm_key_vault.kv2.id
-  tags         = var.tags
-
-  depends_on = [azurerm_key_vault_access_policy.kv2_access_terraform]
-  lifecycle {
-       prevent_destroy = true
+       ignore_changes = [ var.secrets_kv2 ]
    }
 }
