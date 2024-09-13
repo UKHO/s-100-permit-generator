@@ -133,6 +133,5 @@ resource "azurerm_key_vault_secret" "passed_in_secrets_kv2" {
 
   lifecycle {
        prevent_destroy = true
-       ignore_changes = [ ]
    }
 }

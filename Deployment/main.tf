@@ -61,7 +61,6 @@ module "key_vault" {
   secrets_kv2 = {
     "EventHubLoggingConfiguration--ConnectionString"            = module.eventhub.log_primary_connection_string
     "EventHubLoggingConfiguration--EntityPath"                  = module.eventhub.entity_path
-    "ApplicationInsights--ConnectionString"                     = module.app_insights.connection_string
   }
   tags                                                          = local.tags
 }
