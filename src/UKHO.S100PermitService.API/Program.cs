@@ -5,6 +5,7 @@ using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.ApplicationInsights.AspNetCore.Extensions;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -12,6 +13,7 @@ using Serilog.Events;
 using UKHO.Logging.EventHubLogProvider;
 using UKHO.S100PermitService.API.Middleware;
 using UKHO.S100PermitService.Common;
+using UKHO.S100PermitService.Common.Cache;
 using UKHO.S100PermitService.Common.Configuration;
 using UKHO.S100PermitService.Common.IO;
 using UKHO.S100PermitService.Common.Services;
@@ -42,9 +44,9 @@ namespace UKHO.S100PermitService.API
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "UKHO S100 Permit Service APIs");
                 c.RoutePrefix = "swagger";
-            });           
+            });
 
-            app.UseCorrelationIdMiddleware();            
+            app.UseCorrelationIdMiddleware();
             app.UseHeaderPropagation();
             app.UseRouting();
 
@@ -69,13 +71,28 @@ namespace UKHO.S100PermitService.API
             {
                 var secretClient = new SecretClient(new Uri(kvServiceUri), new DefaultAzureCredential(new DefaultAzureCredentialOptions()));
                 builder.Configuration.AddAzureKeyVault(secretClient, new KeyVaultSecretManager());
-            }             
+            }
         }
 
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
             var configuration = builder.Configuration;
-            
+
+            var kvServiceUri = configuration["KeyVaultSettings:ServiceUri"];
+            if(!string.IsNullOrWhiteSpace(kvServiceUri))
+            {
+                var secretClient = new SecretClient(new Uri(kvServiceUri),
+                    new DefaultAzureCredential(new DefaultAzureCredentialOptions()));
+
+                builder.Services.AddSingleton<IManufactureCache, ManufactureCache>(provider =>
+                {
+                    var cacheDurationInMinutes =
+                        configuration.GetValue("MemoryCacheConfiguration:CacheDurationInMinutes", 60);
+                    return new ManufactureCache(TimeSpan.FromMinutes(cacheDurationInMinutes),
+                        new MemoryCache(new MemoryCacheOptions()), secretClient);
+                });
+            }
+
             builder.Services.AddLogging(loggingBuilder =>
             {
                 loggingBuilder.AddConfiguration(configuration.GetSection("Logging"));
